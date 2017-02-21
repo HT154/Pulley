@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C6DF73CE1D2DE2B500735EBC"
-               BuildableName = "Pulley.app"
+               BuildableName = "PulleyDemo.app"
                BlueprintName = "PulleyDemo"
                ReferencedContainer = "container:Pulley.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C6DF73CE1D2DE2B500735EBC"
-            BuildableName = "Pulley.app"
+            BuildableName = "PulleyDemo.app"
             BlueprintName = "PulleyDemo"
             ReferencedContainer = "container:Pulley.xcodeproj">
          </BuildableReference>
@@ -56,7 +56,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C6DF73CE1D2DE2B500735EBC"
-            BuildableName = "Pulley.app"
+            BuildableName = "PulleyDemo.app"
             BlueprintName = "PulleyDemo"
             ReferencedContainer = "container:Pulley.xcodeproj">
          </BuildableReference>
@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C6DF73CE1D2DE2B500735EBC"
-            BuildableName = "Pulley.app"
+            BuildableName = "PulleyDemo.app"
             BlueprintName = "PulleyDemo"
             ReferencedContainer = "container:Pulley.xcodeproj">
          </BuildableReference>

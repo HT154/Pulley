@@ -33,39 +33,39 @@ class DrawerContentViewController: UIViewController {
 
 extension DrawerContentViewController: PulleyDrawerViewControllerDelegate {
     
-    func collapsedDrawerHeight() -> CGFloat
-    {
+    var collapsedDrawerHeight: CGFloat {
         return 68.0
     }
     
-    func partialRevealDrawerHeight() -> CGFloat
-    {
+    var partialRevealDrawerHeight: CGFloat {
         return 264.0
     }
     
-    func supportedDrawerPositions() -> [PulleyPosition] {
+    var supportedDrawerPositions: [PulleyPosition] {
         return PulleyPosition.all // You can specify the drawer positions you support. This is the same as: [.open, .partiallyRevealed, .collapsed, .closed]
     }
     
-    func drawerPositionDidChange(drawer: PulleyViewController)
-    {
+    func drawerPositionDidChange(drawer: PulleyViewController) {
         tableView.isScrollEnabled = drawer.drawerPosition == .open
         
-        if drawer.drawerPosition != .open
-        {
+        if drawer.drawerPosition != .open {
             searchBar.resignFirstResponder()
         }
     }
+
+    func setDrawerScrollViewBottomInset(_ offset: CGFloat) {
+        guard isViewLoaded else { return }
+        tableView.contentInset.bottom = offset
+    }
+
 }
 
 extension DrawerContentViewController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        
-        if let drawerVC = self.parent as? PulleyViewController
-        {
-            drawerVC.setDrawerPosition(position: .open, animated: true)
-        }
+        guard let drawerVC = self.parent as? PulleyViewController else { return }
+
+        drawerVC.setDrawerPosition(position: .open, animated: true)
     }
 }
 
@@ -93,8 +93,7 @@ extension DrawerContentViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let drawer = self.parent as? PulleyViewController
-        {
+        if let drawer = self.parent as? PulleyViewController {
             let primaryContent = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PrimaryTransitionTargetViewController")
             
             drawer.setDrawerPosition(position: .collapsed, animated: true)
