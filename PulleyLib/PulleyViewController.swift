@@ -22,21 +22,17 @@ import UIKit
  *  View controllers in the drawer can implement this to receive changes in state or provide values for the different drawer positions.
  */
 public protocol PulleyDrawerViewControllerDelegate: PulleyDelegate {
-
     var collapsedDrawerHeight: CGFloat { get }
     var partialRevealDrawerHeight: CGFloat { get }
     var supportedDrawerPositions: [PulleyPosition] { get }
     func setDrawerScrollViewBottomInset(_: CGFloat)
-
 }
 
 extension PulleyDrawerViewControllerDelegate {
-
     public var collapsedDrawerHeight: CGFloat { return 56 }
     public var partialRevealDrawerHeight: CGFloat { return 56 }
     public var supportedDrawerPositions: [PulleyPosition] { return PulleyPosition.all }
     public func setDrawerScrollViewBottomInset(_: CGFloat) {}
-
 }
 
 extension UIViewController {
@@ -613,13 +609,17 @@ open class PulleyViewController: UIViewController, UIScrollViewDelegate, PulleyP
 
     // MARK: UIScrollViewDelegate
 
-    private var lastDragTargetContentOffset: CGPoint = CGPoint.zero
-
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard scrollView == drawerScrollView else { return }
 
         endDragAction?()
         endDragAction = nil
+    }
+
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y <= 5 { // disable bouncing once drawer is at rest at the bottom
+            drawerScrollView.bounces = false
+        }
     }
 
     var endDragAction: (() -> Void)?
@@ -738,7 +738,7 @@ open class PulleyViewController: UIViewController, UIScrollViewDelegate, PulleyP
 
             backgroundDimmingView.isUserInteractionEnabled = true
         } else if backgroundDimmingView.alpha >= 0.001 {
-            backgroundDimmingView.alpha = 0.0    
+            backgroundDimmingView.alpha = 0.0
 
             delegate?.makeUIAdjustmentsForFullscreen?(progress: 0.0)
             (drawerContentViewController as? PulleyDrawerViewControllerDelegate)?.makeUIAdjustmentsForFullscreen?(progress: 0.0)
@@ -750,6 +750,11 @@ open class PulleyViewController: UIViewController, UIScrollViewDelegate, PulleyP
         delegate?.drawerChangedDistanceFromBottom?(drawer: self, distance: scrollView.contentOffset.y + lowestStop)
         (drawerContentViewController as? PulleyDrawerViewControllerDelegate)?.drawerChangedDistanceFromBottom?(drawer: self, distance: scrollView.contentOffset.y + lowestStop)
         (primaryContentViewController as? PulleyPrimaryContentControllerDelegate)?.drawerChangedDistanceFromBottom?(drawer: self, distance: scrollView.contentOffset.y + lowestStop)
+
+        if drawerScrollView.contentOffset.y > 0 && drawerScrollView.contentOffset.y < drawerStops.max()! - drawerStops.min()! {
+            // enable bouncing if scrolling between the bottom and top stops
+            drawerScrollView.bounces = true
+        }
     }
 
     // MARK: Touch Passthrough ScrollView Delegate
